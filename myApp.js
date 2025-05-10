@@ -1,20 +1,25 @@
 const express = require('express');
+const helmet = require('helmet');  // Import helmet
+
 const app = express();
 
-// ✅ Use Helmet middleware to secure the app (optional, but good practice)
-const helmet = require('helmet');
+// ✅ Use helmet middleware correctly
 app.use(helmet.hidePoweredBy());
 
-// Middleware to handle requests to /hello
-app.get('/hello', function (req, res) {
+// Define other routes
+app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-// Other app routes can go here
-app.get('/', (req, res) => {
-  res.send('Welcome to my app!');
+app.get('/app-info', (req, res) => {
+  res.json({ message: 'App Info endpoint' });
 });
 
-// This will handle any dynamic routes or other APIs you define here
+// Set the port to 10000 as detected by Render
+const port = process.env.PORT || 10000;
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 module.exports = app;
