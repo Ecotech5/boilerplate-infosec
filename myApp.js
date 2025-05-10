@@ -1,17 +1,20 @@
 const express = require('express');
-const helmet = require('helmet');
-
 const app = express();
 
-// Middleware
-app.use(helmet.hidePoweredBy()); // Security: Remove X-Powered-By
-app.use(express.static('public')); // Serve static files
-app.disable('strict-transport-security'); // Disable HSTS if required
+// ✅ Use Helmet middleware to secure the app (optional, but good practice)
+const helmet = require('helmet');
+app.use(helmet.hidePoweredBy());
 
-// Routes
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/views/index.html');
+// Middleware to handle requests to /hello
+app.get('/hello', function (req, res) {
+  res.send('Hello, World!');
 });
 
-// Export app for server.js
+// Other app routes can go here
+app.get('/', (req, res) => {
+  res.send('Welcome to my app!');
+});
+
+// This will handle any dynamic routes or other APIs you define here
+
 module.exports = app;
