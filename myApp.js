@@ -1,25 +1,23 @@
 const express = require('express');
-const helmet = require('helmet');  // Import helmet
-
+const helmet = require('helmet');
 const app = express();
 
-// ✅ Use helmet middleware correctly
-app.use(helmet.hidePoweredBy());
+// Apply helmet and frameguard middleware properly
+app.use(helmet()); // Apply all default Helmet protections
+app.use(helmet.frameguard({ action: 'deny' })); // Override or ensure frameguard is set to 'deny'
 
-// Define other routes
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
+const api = require('./server.js');
+
+app.use(express.static('public'));
+app.use('/_api', api);
+
+app.get("/", function (request, response) {
+  response.sendFile(__dirname + '/views/index.html');
 });
 
-app.get('/app-info', (req, res) => {
-  res.json({ message: 'App Info endpoint' });
-});
-
-// Set the port to 10000 as detected by Render
-const port = process.env.PORT || 10000;
-
+let port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  console.log(`Your app is listening on port ${port}`);
 });
 
 module.exports = app;
