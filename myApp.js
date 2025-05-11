@@ -1,23 +1,14 @@
 const express = require('express');
 const helmet = require('helmet');
+
 const app = express();
 
-// Apply helmet and frameguard middleware properly
-app.use(helmet()); // Apply all default Helmet protections
-app.use(helmet.frameguard({ action: 'deny' })); // Override or ensure frameguard is set to 'deny'
+// Security middleware
+app.use(helmet.hidePoweredBy());
+app.use(helmet.frameguard({ action: 'deny' })); // ✅ This mitigates clickjacking
 
-const api = require('./server.js');
+// You can add other middleware or routes below if needed
+// For example:
+// app.get('/', (req, res) => res.send('Hello World'));
 
-app.use(express.static('public'));
-app.use('/_api', api);
-
-app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
-});
-
-let port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Your app is listening on port ${port}`);
-});
-
-module.exports = app;
+module.exports = app; // ✅ Required for server.js to use this app
