@@ -3,7 +3,12 @@ const helmet = require('helmet');
 const app = express();
 
 
-  
+  // Use helmet to enhance API's security
+app.use(helmet());
+
+// Hide the X-Powered-By header
+app.use(helmet.hidePoweredBy());
+
 
 
 
