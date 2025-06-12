@@ -3,10 +3,7 @@ const Helmet = require('Helmet');
 const app = express();
 
 const PORT= process.env.PORT|| 3030;
-app.listen(PORT, () =>{
-  console.log(`Ecotech is listening on port ${PORT}`);
-});
-
+  
 
 
 
