@@ -32,6 +32,8 @@ app.use(helmet.hsts({
 app.use(helmet.dnsPrefetchControl());
 
 
+// Disable client-side caching
+app.use(helmet.noCache());
 
 
 
