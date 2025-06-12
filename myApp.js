@@ -9,6 +9,8 @@ app.use(helmet());
 // Hide the X-Powered-By header
 app.use(helmet.hidePoweredBy());
 
+// Prevent clickjacking by denying framing
+app.use(helmet.frameguard({ action: 'deny' }));
 
 
 
