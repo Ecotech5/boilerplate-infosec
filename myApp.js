@@ -6,6 +6,15 @@ const app = express();
   // Use helmet to enhance API's security
 app.use(helmet());
 
+// Set Content Security Policy (CSP) separately as required
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", 'trusted-cdn.com']
+  }
+}));
+
+
 // Hide the X-Powered-By header
 app.use(helmet.hidePoweredBy());
 
@@ -35,13 +44,7 @@ app.use(helmet.dnsPrefetchControl());
 // Disable client-side caching
 app.use(helmet.noCache());
 
-// Set Content Security Policy (CSP)
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", 'trusted-cdn.com']
-  }
-}));
+
 
 
 
