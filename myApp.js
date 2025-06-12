@@ -2,98 +2,35 @@ const express = require('express');
 const helmet = require('helmet');
 const app = express();
 
-
-  // Use helmet to enhance API's security
-app.use(helmet());
-
-// Set Content Security Policy (CSP) separately as required
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", 'trusted-cdn.com']
-  }
+app.use(helmet({
+  frameguard: {
+    action: 'deny'
+  },
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", 'trusted-cdn.com']
+    }
+  },
+  dnsPrefetchControl: false
 }));
 
-
-// Hide the X-Powered-By header
-app.use(helmet.hidePoweredBy());
-
-// Prevent clickjacking by denying framing
-app.use(helmet.frameguard({ action: 'deny' }));
-
-// Enable XSS protection
+// You may still add specific ones not covered by default:
+app.use(helmet.noCache());
 app.use(helmet.xssFilter());
-
-// Prevent MIME type sniffing
 app.use(helmet.noSniff());
-
-// Prevent Internet Explorer from executing downloads in your site’s context
 app.use(helmet.ieNoOpen());
 
-// Enforce HTTPS usage for the next 90 days
 const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
 app.use(helmet.hsts({
   maxAge: ninetyDaysInSeconds,
   force: true
 }));
 
-// Disable DNS prefetching
-app.use(helmet.dnsPrefetchControl());
-
-
-// Disable client-side caching
-app.use(helmet.noCache());
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// other code...
 module.exports = app;
 const api = require('./server.js');
 app.use(express.static('public'));
-app.disable('strict-transport-security');
 app.use('/_api', api);
 app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
