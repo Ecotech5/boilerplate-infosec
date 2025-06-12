@@ -18,6 +18,9 @@ app.use(helmet.xssFilter());
 // Prevent MIME type sniffing
 app.use(helmet.noSniff());
 
+// Prevent Internet Explorer from executing downloads in your site’s context
+app.use(helmet.ieNoOpen());
+
 
 
 
